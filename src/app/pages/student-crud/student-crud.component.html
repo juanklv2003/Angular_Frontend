@@ -1,0 +1,46 @@
+<h2>Gestión de estudiantes</h2>
+
+<!-- 🔍 Filtro -->
+<input
+  type="text"
+  placeholder="Buscar por nombre"
+  [formControl]="search"
+/>
+
+<hr />
+
+<!-- ✍️ Formulario -->
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input placeholder="Nombre" formControlName="name" required />
+  <input placeholder="Email" formControlName="email" required />
+  <input type="number" placeholder="Edad" formControlName="age" />
+
+  <button type="submit">
+    {{ form.value.id ? 'Actualizar' : 'Crear' }}
+  </button>
+</form>
+
+<hr />
+
+<!-- 📋 Listado -->
+@if (students$ | async; as students) {
+
+  @if (students.length === 0) {
+    <p>No hay estudiantes</p>
+  }
+
+  <ul>
+    @for (s of students; track s.id) {
+      <li>
+        <strong>{{ s.name }}</strong>
+        ({{ s.email }} – {{ s.age }} años)
+
+        <button (click)="edit(s)">Editar</button>
+        <button (click)="remove(s.id)">Eliminar</button>
+      </li>
+    }
+  </ul>
+
+} @else {
+  <p>Cargando...</p>
+}

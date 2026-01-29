@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { map, take } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -12,8 +13,21 @@ export class AuthCallbackPage {
   private auth = inject(AuthService);
 
   constructor() {
-    const token = this.route.snapshot.queryParamMap.get('token');
-    if (token) this.auth.saveToken(token);
-    this.router.navigate(['/']);
+    this.route.queryParamMap.pipe(
+      map(params => params.get('token')),
+      take(1)
+    ).subscribe((token) => {
+      const finalToken = token ?? this.getTokenFromFragment();
+      if (finalToken) this.auth.saveToken(finalToken);
+      window.location.replace('/');
+    });
+  }
+
+  private getTokenFromFragment(): string | null {
+    const fragment = this.route.snapshot.fragment;
+    if (!fragment) return null;
+
+    const params = new URLSearchParams(fragment);
+    return params.get('token');
   }
 }

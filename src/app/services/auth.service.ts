@@ -18,6 +18,10 @@ export class AuthService {
     window.location.href = `${this.API}/google`;
   }
 
+  getGoogleLoginUrl(): string {
+    return `${this.API}/google`;
+  }
+
   saveToken(token: string) {
     localStorage.setItem('token', token);
   }

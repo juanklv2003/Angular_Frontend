@@ -12,8 +12,9 @@ import { TokenStorage } from '../../core/auth/token.storage';
       <div class="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
         <a routerLink="/" class="font-semibold text-slate-900">Demo App</a>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-3">
           @if (logged()) {
+            <span class="text-sm text-slate-600">{{ userEmail() }}</span>
             <button class="rounded-xl border px-3 py-1.5 text-sm hover:bg-slate-50" (click)="logout()">
               Logout
             </button>
@@ -30,6 +31,7 @@ export class NavbarComponent {
   private auth = inject(AuthService);
 
   logged = computed(() => this.token.isLogged());
+  userEmail = computed(() => this.token.getUserEmail());
 
   logout() {
     this.auth.logout();

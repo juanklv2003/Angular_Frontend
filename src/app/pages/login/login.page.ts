@@ -17,6 +17,7 @@ export class LoginPage {
 
   loading = signal(false);
   error = signal<string | null>(null);
+  googleUrl = this.auth.getGoogleLoginUrl();
 
   form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -46,7 +47,4 @@ export class LoginPage {
     ).subscribe();
   }
 
-  google() {
-    this.auth.loginWithGoogle();
-  }
 }
